@@ -18,15 +18,9 @@ namespace Notepad.Extensions.Logging.FunctionalTest
             var sp = sc.BuildServiceProvider();
             var logger = sp.GetRequiredService<ILogger<Program>>();
 
-            //logger.LogWarning("Here is a warning.");
-            //logger.LogError(GetException(), "oh no!.");
-            //logger.LogInformation("Here is some info.");
-            //logger.LogInformation("here, have a nice 😋 emoji.");
-            logger.LogInformation(@"💧 Paul
-@paws101
-Replying to
-@yaakov_h
-But does it handle emoji injection?.");
+            logger.LogWarning("Here is a warning.");
+            logger.LogError(GetException(), "oh no!.");
+            logger.LogInformation("Here is some info.");
         }
 
         static Exception GetException()

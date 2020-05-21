@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Microsoft.Extensions.Logging
 {
@@ -16,13 +15,5 @@ namespace Microsoft.Extensions.Logging
 
         [DllImport("User32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, [MarshalAs(UnmanagedType.LPWStr)] string lParam);
-
-        public delegate bool EnumWindowsDelegate(IntPtr hWnd, IntPtr lParam);
-
-        [DllImport("user32.dll")]
-        public static extern bool EnumWindows(EnumWindowsDelegate lpEnumFunc, IntPtr lParam);
-
-        [DllImport("User32.dll")]
-        public static extern int GetWindowText(IntPtr hWndParent, StringBuilder sb, int maxCount);
     }
 }
