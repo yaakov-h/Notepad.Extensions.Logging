@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Extensions.Logging
 {
@@ -13,13 +14,7 @@ namespace Microsoft.Extensions.Logging
             try
             {
                 FindMainWindow();
-                if (handle == IntPtr.Zero)
-                {
-                    return handle;
-                }
-
-                IntPtr edit = NativeMethods.FindWindowEx(handle, IntPtr.Zero, "EDIT", null);
-                return edit;
+                return handle;
             }
             finally
             {
@@ -44,9 +39,10 @@ namespace Microsoft.Extensions.Logging
                 throw new Win32Exception(result);
             }
 
+            WindowFinder.handle = hWnd;
+
             if (IsKnownNotepadWindow(sb.ToString()))
             {
-                WindowFinder.handle = hWnd;
                 return false;
             }
             return true;
@@ -58,13 +54,22 @@ namespace Microsoft.Extensions.Logging
         [ThreadStatic]
         static StringBuilder sb;
 
+        static Regex notepadPlusPlusRegex = new Regex(@"^new \d+ - Notepad\+\+$", RegexOptions.Compiled);
+
         static bool IsKnownNotepadWindow(string titleText)
         {
             switch (titleText)
             {
                 case "Untitled - Notepad":
                 case "*Untitled - Notepad":
+                    handle = NativeMethods.FindWindowEx(handle, IntPtr.Zero, "EDIT", null);
                     return true;
+            }
+
+            if (notepadPlusPlusRegex.IsMatch(titleText))
+            {
+                handle = NativeMethods.FindWindowEx(handle, IntPtr.Zero, "SysTabControl32", null);
+                return true;
             }
 
             return false;
