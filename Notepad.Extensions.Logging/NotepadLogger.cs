@@ -7,11 +7,11 @@ namespace Microsoft.Extensions.Logging
 {
     class NotepadLogger : ILogger
     {
-        public NotepadLogger(ObjectPool<StringBuilder> stringBuilderPool, string categoryName, string windowName = null)
+        public NotepadLogger(ObjectPool<StringBuilder> stringBuilderPool, string categoryName, string windowName)
         {
             this.stringBuilderPool = stringBuilderPool;
             this.categoryName = categoryName;
-            this.windowName = windowName;
+            this.windowName = windowName ?? throw new ArgumentNullException("Window name cannot be null.");
         }
 
         readonly ObjectPool<StringBuilder> stringBuilderPool;
