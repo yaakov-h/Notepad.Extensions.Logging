@@ -84,42 +84,9 @@ namespace Microsoft.Extensions.Logging
 
         static void WriteToNotepad(string message)
         {
-            IntPtr hwnd = FindNotepadWindow();
+            IntPtr hwnd = WindowFinder.FindNotepadWindow();
             IntPtr edit = NativeMethods.FindWindowEx(hwnd, IntPtr.Zero, "EDIT", null);
             NativeMethods.SendMessage(edit, NativeMethods.EM_REPLACESEL, (IntPtr)1, message);
         }
-
-        static IntPtr FindNotepadWindow()
-        {
-            IntPtr hwnd;
-            
-            hwnd = NativeMethods.FindWindow(null, "Untitled - Notepad");
-            if (hwnd != IntPtr.Zero)
-            {
-                return hwnd;
-            }
-
-            hwnd = NativeMethods.FindWindow(null, "*Untitled - Notepad");
-            if (hwnd != IntPtr.Zero)
-            {
-                return hwnd;
-            }
-
-            return IntPtr.Zero;
-        }
-    }
-
-    static class NativeMethods
-    {
-        [DllImport("User32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport("User32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr FindWindowEx(IntPtr hWndParent, IntPtr hWndChildAfter, string lpszClass, string lpszWindow);
-
-        public const int EM_REPLACESEL = 0x00C2;
-
-        [DllImport("User32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, [MarshalAs(UnmanagedType.LPWStr)] string lParam);
     }
 }
