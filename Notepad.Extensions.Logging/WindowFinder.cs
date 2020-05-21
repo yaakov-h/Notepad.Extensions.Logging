@@ -6,6 +6,13 @@ namespace Microsoft.Extensions.Logging
     {
         public static IntPtr FindNotepadWindow()
         {
+            var hwnd = FindMainWindow();
+            IntPtr edit = NativeMethods.FindWindowEx(hwnd, IntPtr.Zero, "EDIT", null);
+            return edit;
+        }
+
+        static IntPtr FindMainWindow()
+        {
             IntPtr hwnd;
             
             hwnd = NativeMethods.FindWindow(null, "Untitled - Notepad");

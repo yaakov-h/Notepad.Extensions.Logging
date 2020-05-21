@@ -85,8 +85,7 @@ namespace Microsoft.Extensions.Logging
         static void WriteToNotepad(string message)
         {
             IntPtr hwnd = WindowFinder.FindNotepadWindow();
-            IntPtr edit = NativeMethods.FindWindowEx(hwnd, IntPtr.Zero, "EDIT", null);
-            NativeMethods.SendMessage(edit, NativeMethods.EM_REPLACESEL, (IntPtr)1, message);
+            NativeMethods.SendMessage(hwnd, NativeMethods.EM_REPLACESEL, (IntPtr)1, message);
         }
     }
 }
