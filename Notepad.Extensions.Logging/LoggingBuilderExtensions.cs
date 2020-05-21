@@ -1,10 +1,17 @@
-﻿namespace Microsoft.Extensions.Logging
+﻿using System;
+
+namespace Microsoft.Extensions.Logging
 {
     public static class LoggingBuilderExtensions
     {
         public static ILoggingBuilder AddNotepad(this ILoggingBuilder builder)
+             => AddNotepad(builder, null);
+
+        public static ILoggingBuilder AddNotepad(this ILoggingBuilder builder, Action<NotepadProviderOptions> optionsConfiguration)
         {
-            builder.AddProvider(NotepadLoggerProvider.Instance);
+            var options = NotepadProviderOptions.Default;
+            optionsConfiguration?.Invoke(options);
+            builder.AddProvider(new NotepadLoggerProvider(options));
             return builder;
         }
     }

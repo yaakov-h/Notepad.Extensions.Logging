@@ -7,14 +7,16 @@ namespace Microsoft.Extensions.Logging
 {
     class NotepadLogger : ILogger
     {
-        public NotepadLogger(ObjectPool<StringBuilder> stringBuilderPool, string categoryName)
+        public NotepadLogger(ObjectPool<StringBuilder> stringBuilderPool, string categoryName, string windowName = null)
         {
             this.stringBuilderPool = stringBuilderPool;
             this.categoryName = categoryName;
+            this.windowName = windowName;
         }
 
         readonly ObjectPool<StringBuilder> stringBuilderPool;
         readonly string categoryName;
+        readonly string windowName;
 
         public IDisposable BeginScope<TState>(TState state) => NullDisposable.Instance;
 
@@ -82,30 +84,33 @@ namespace Microsoft.Extensions.Logging
             _ => throw new ArgumentOutOfRangeException(nameof(logLevel)),
         };
 
-        static void WriteToNotepad(string message)
+        void WriteToNotepad(string message)
         {
             IntPtr hwnd = FindNotepadWindow();
+
+            if (hwnd.Equals(IntPtr.Zero))
+            {
+                return;
+            }
+
             IntPtr edit = NativeMethods.FindWindowEx(hwnd, IntPtr.Zero, "EDIT", null);
             NativeMethods.SendMessage(edit, NativeMethods.EM_REPLACESEL, (IntPtr)1, message);
         }
 
-        static IntPtr FindNotepadWindow()
+        IntPtr FindNotepadWindow()
         {
             IntPtr hwnd;
-            
-            hwnd = NativeMethods.FindWindow(null, "Untitled - Notepad");
-            if (hwnd != IntPtr.Zero)
-            {
-                return hwnd;
-            }
 
-            hwnd = NativeMethods.FindWindow(null, "*Untitled - Notepad");
-            if (hwnd != IntPtr.Zero)
+            hwnd = NativeMethods.FindWindow(null, windowName);
+            if (hwnd.Equals(IntPtr.Zero))
             {
-                return hwnd;
+                // when the file changes, notepad changes the name to "* Window Name", so later created loggers cannot find window
+                var builder = stringBuilderPool.Get();
+                builder.Append("*").Append(windowName);
+                hwnd = NativeMethods.FindWindow(null, builder.ToString());
+                stringBuilderPool.Return(builder);
             }
-
-            return IntPtr.Zero;
+            return hwnd;
         }
     }
 

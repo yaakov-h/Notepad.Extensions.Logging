@@ -11,11 +11,15 @@ namespace Microsoft.Extensions.Logging
             stringBuilderPool = poolProvider.CreateStringBuilderPool();
         }
 
-        public static ILoggerProvider Instance { get; } = new NotepadLoggerProvider();
+        internal NotepadLoggerProvider(NotepadProviderOptions options) : this()
+        {
+            this.options = options;
+        }
 
         readonly ObjectPool<StringBuilder> stringBuilderPool;
+        readonly NotepadProviderOptions options;
 
-        public ILogger CreateLogger(string categoryName) => new NotepadLogger(stringBuilderPool, categoryName);
+        public ILogger CreateLogger(string categoryName) => new NotepadLogger(stringBuilderPool, categoryName, options.WindowName);
 
         public void Dispose()
         {
