@@ -8,7 +8,7 @@ This is a library for .NET / .NET Core to log your program's output to a handy N
 
 To use:
 
-1. Add a package reference to Notepad.Extensions.Logging
+1. Add a package reference to `Notepad.Extensions.Logging`.
 2. In `Startup.cs`, call `AddNotepad()`, like so:
 
 ```csharp
@@ -23,7 +23,8 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-3. Open a new Notepad window
+3. Open a new Notepad window.
+4. Run your application.
 
 ## Source Material
 
