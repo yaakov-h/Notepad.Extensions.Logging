@@ -3,6 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
+    <Authors>yaakov</Authors>
+    <Company />
+    <PackageProjectUrl>https://github.com/yaakov-h/Notepad.Extensions.Logging</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yaakov-h/Notepad.Extensions.Logging</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
