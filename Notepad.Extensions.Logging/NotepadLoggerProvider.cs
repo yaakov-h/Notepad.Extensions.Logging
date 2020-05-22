@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.Extensions.Options;
 
-namespace Microsoft.Extensions.Logging
+namespace Notepad.Extensions.Logging
 {
     [ProviderAlias("Notepad")]
     class NotepadLoggerProvider : ILoggerProvider

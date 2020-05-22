@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Microsoft.Extensions.Logging
+namespace Notepad.Extensions.Logging
 {
     class NullDisposable : IDisposable
     {

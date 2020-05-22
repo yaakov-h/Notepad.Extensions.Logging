@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Buffers;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
+using static Notepad.Extensions.Logging.NativeMethods;
 
-namespace Microsoft.Extensions.Logging
+namespace Notepad.Extensions.Logging
 {
     class NotepadLogger : ILogger
     {
@@ -88,41 +93,58 @@ namespace Microsoft.Extensions.Logging
 
         void WriteToNotepad(string message)
         {
-            IntPtr hwnd = FindNotepadWindow();
+            var (kind, hwnd) = WindowFinder.FindNotepadWindow();
+            switch (kind)
+            {
+                case WindowKind.Notepad:
+                        SendMessage(hwnd, EM_REPLACESEL, (IntPtr)1, message);
+                    break;
 
-            if (hwnd.Equals(IntPtr.Zero))
+                case WindowKind.NotepadPlusPlus:
+                {
+                    WriteToNotepadPlusPlus(hwnd, message);
+                    break;
+                }
+            }
+        }
+
+        unsafe static void WriteToNotepadPlusPlus(IntPtr hwnd, string message)
+        {
+            var dataLength = Encoding.UTF8.GetByteCount(message);
+
+            //
+            // HERE BE DRAGONS
+            // We need to copy the message into Notepad++'s memory so that it can read it.
+            // Look away now, before its too late.
+            // 
+ 
+            /* unused thread ID */ _ = GetWindowThreadProcessId(hwnd, out var remoteProcessId);
+            using var remoteProcess = Process.GetProcessById(remoteProcessId);
+            var mem = VirtualAllocEx(remoteProcess.Handle, IntPtr.Zero, (IntPtr)dataLength, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+            if (mem == IntPtr.Zero)
             {
                 return;
             }
 
-            IntPtr edit = NativeMethods.FindWindowEx(hwnd, IntPtr.Zero, "EDIT", null);
-            NativeMethods.SendMessage(edit, NativeMethods.EM_REPLACESEL, (IntPtr)1, message);
-        }
-
-        IntPtr FindNotepadWindow()
-        {
-            IntPtr hwnd;
-
-            hwnd = NativeMethods.FindWindow(null, windowName);
-            if (hwnd.Equals(IntPtr.Zero))
+            try
             {
-                hwnd = NativeMethods.FindWindow(null, changedWindowName);
+                var data = ArrayPool<byte>.Shared.Rent(dataLength);
+                try
+                {
+                    var idx = Encoding.UTF8.GetBytes(message, 0, message.Length, data, 0);
+
+                    WriteProcessMemory(remoteProcess.Handle, mem, data, (IntPtr)dataLength, out var bytesWritten);
+                    SendMessage(hwnd, SCI_ADDTEXT, (IntPtr)dataLength, mem);
+                }
+                finally
+                {
+                    ArrayPool<byte>.Shared.Return(data);
+                }
             }
-            return hwnd;
+            finally
+            {
+                VirtualFreeEx(remoteProcess.Handle, IntPtr.Zero, IntPtr.Zero, MEM_RELEASE);
+            }
         }
-    }
-
-    static class NativeMethods
-    {
-        [DllImport("User32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport("User32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr FindWindowEx(IntPtr hWndParent, IntPtr hWndChildAfter, string lpszClass, string lpszWindow);
-
-        public const int EM_REPLACESEL = 0x00C2;
-
-        [DllImport("User32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, [MarshalAs(UnmanagedType.LPWStr)] string lParam);
     }
 }
