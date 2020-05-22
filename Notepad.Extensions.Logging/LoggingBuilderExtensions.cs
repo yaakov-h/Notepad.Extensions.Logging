@@ -1,4 +1,6 @@
-﻿namespace Microsoft.Extensions.Logging
+﻿using Notepad.Extensions.Logging;
+
+namespace Microsoft.Extensions.Logging
 {
     public static class LoggingBuilderExtensions
     {

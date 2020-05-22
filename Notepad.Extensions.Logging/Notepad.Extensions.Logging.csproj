@@ -10,6 +10,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

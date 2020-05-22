@@ -1,7 +1,8 @@
 ﻿using System.Text;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 
-namespace Microsoft.Extensions.Logging
+namespace Notepad.Extensions.Logging
 {
     class NotepadLoggerProvider : ILoggerProvider
     {
