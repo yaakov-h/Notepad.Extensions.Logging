@@ -7,7 +7,6 @@ namespace Notepad.Extensions.Logging
 {
     static class WindowFinder
     {
-
         public static (WindowKind kind, IntPtr hwnd) FindNotepadWindow()
         {
             sb ??= new StringBuilder(4096);
