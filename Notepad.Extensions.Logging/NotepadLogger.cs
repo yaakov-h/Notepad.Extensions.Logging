@@ -97,10 +97,10 @@ namespace Notepad.Extensions.Logging
                     break;
 
                 case WindowKind.NotepadPlusPlus:
-                    {
-                        WriteToNotepadPlusPlus(hwnd, message);
-                        break;
-                    }
+                {
+                    WriteToNotepadPlusPlus(hwnd, message);
+                    break;
+                }
             }
         }
 
@@ -114,10 +114,13 @@ namespace Notepad.Extensions.Logging
             // Look away now, before its too late.
             // 
  
-            var threadID = GetWindowThreadProcessId(hwnd, out var remoteProcessId);
+            /* unused thread ID */ _ = GetWindowThreadProcessId(hwnd, out var remoteProcessId);
             using var remoteProcess = Process.GetProcessById(remoteProcessId);
             var mem = VirtualAllocEx(remoteProcess.Handle, IntPtr.Zero, (IntPtr)dataLength, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-            if (mem == IntPtr.Zero) throw new Win32Exception();
+            if (mem == IntPtr.Zero)
+            {
+                return;
+            }
 
             try
             {
