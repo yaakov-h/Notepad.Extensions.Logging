@@ -84,8 +84,28 @@ namespace Microsoft.Extensions.Logging
 
         static void WriteToNotepad(string message)
         {
-            IntPtr hwnd = WindowFinder.FindNotepadWindow();
-            NativeMethods.SendMessage(hwnd, NativeMethods.EM_REPLACESEL, (IntPtr)1, message);
+            IntPtr hwnd = FindNotepadWindow();
+            IntPtr edit = NativeMethods.FindWindowEx(hwnd, IntPtr.Zero, "EDIT", null);
+            NativeMethods.SendMessage(edit, NativeMethods.EM_REPLACESEL, (IntPtr)1, message);
+        }
+
+        static IntPtr FindNotepadWindow()
+        {
+            IntPtr hwnd;
+            
+            hwnd = NativeMethods.FindWindow(null, "Untitled - Notepad");
+            if (hwnd != IntPtr.Zero)
+            {
+                return hwnd;
+            }
+
+            hwnd = NativeMethods.FindWindow(null, "*Untitled - Notepad");
+            if (hwnd != IntPtr.Zero)
+            {
+                return hwnd;
+            }
+
+            return IntPtr.Zero;
         }
     }
 }
