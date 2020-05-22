@@ -11,12 +11,14 @@ namespace Microsoft.Extensions.Logging
         {
             this.stringBuilderPool = stringBuilderPool;
             this.categoryName = categoryName;
-            this.windowName = windowName ?? throw new ArgumentNullException("Window name cannot be null.");
+            this.windowName = windowName ?? throw new ArgumentNullException(nameof(windowName));
+            this.changedWindowName = $"*{windowName}";
         }
 
         readonly ObjectPool<StringBuilder> stringBuilderPool;
         readonly string categoryName;
         readonly string windowName;
+        readonly string changedWindowName;
 
         public IDisposable BeginScope<TState>(TState state) => NullDisposable.Instance;
 
@@ -104,11 +106,7 @@ namespace Microsoft.Extensions.Logging
             hwnd = NativeMethods.FindWindow(null, windowName);
             if (hwnd.Equals(IntPtr.Zero))
             {
-                // when the file changes, notepad changes the name to "* Window Name", so later created loggers cannot find window
-                var builder = stringBuilderPool.Get();
-                builder.Append("*").Append(windowName);
-                hwnd = NativeMethods.FindWindow(null, builder.ToString());
-                stringBuilderPool.Return(builder);
+                hwnd = NativeMethods.FindWindow(null, changedWindowName);
             }
             return hwnd;
         }
