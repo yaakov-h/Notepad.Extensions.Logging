@@ -39,7 +39,7 @@ namespace Notepad.Extensions.Logging
             optionsReloadToken?.Dispose();
         }
 
-        private void ReloadLoggerOptions(NotepadLoggerOptions options)
+        void ReloadLoggerOptions(NotepadLoggerOptions options)
         {
             this.options = options;
             if (windowFinder is WindowFinder finder)
