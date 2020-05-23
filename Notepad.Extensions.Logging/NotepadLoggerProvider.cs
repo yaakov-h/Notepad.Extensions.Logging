@@ -32,7 +32,7 @@ namespace Notepad.Extensions.Logging
         readonly IDisposable optionsReloadToken;
         NotepadLoggerOptions options;
         
-        public ILogger CreateLogger(string categoryName) => new NotepadLogger(stringBuilderPool, windowFinder, categoryName);
+        public ILogger CreateLogger(string categoryName) => new NotepadLogger(stringBuilderPool, windowFinder, categoryName, options.WindowName);
 
         public void Dispose()
         {
@@ -42,10 +42,6 @@ namespace Notepad.Extensions.Logging
         void ReloadLoggerOptions(NotepadLoggerOptions options)
         {
             this.options = options;
-            if (windowFinder is WindowFinder finder)
-            {
-                finder.WindowName = this.options.WindowName;
-            }
         }
     }
 }

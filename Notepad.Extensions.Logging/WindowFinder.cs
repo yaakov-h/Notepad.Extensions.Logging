@@ -12,14 +12,12 @@ namespace Notepad.Extensions.Logging
 
         readonly ObjectPool<WindowEnumerationState> statePool;
 
-        public string WindowName { get; internal set; }
-
-        public WindowInfo FindNotepadWindow()
+        public WindowInfo FindNotepadWindow(string windowName)
         {
             var stateObject = statePool.Get();
             try
             {
-                stateObject.WindowName = WindowName;
+                stateObject.WindowName = windowName;
                 NativeMethods.EnumWindows(enumWindowsDelegate, stateObject);
                 return new WindowInfo(stateObject.WindowKind, stateObject.Handle);
             }

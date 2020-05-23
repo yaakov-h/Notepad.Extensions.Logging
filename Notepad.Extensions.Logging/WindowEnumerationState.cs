@@ -49,7 +49,7 @@ namespace Notepad.Extensions.Logging
             return true;
         }
 
-        static Regex notepadPlusPlusRegex = new Regex(@" - Notepad\+\+$", RegexOptions.Compiled);
+        static Regex notepadPlusPlusRegex = new Regex(@"^new \d+ - Notepad\+\+$", RegexOptions.Compiled);
 
         bool IsKnownNotepadWindow(string titleText)
         {
@@ -57,24 +57,16 @@ namespace Notepad.Extensions.Logging
             {
                 if (WindowName.Equals(titleText, StringComparison.Ordinal))
                 {
-                    WindowKind = notepadPlusPlusRegex.IsMatch(titleText) ? WindowKind.NotepadPlusPlus : WindowKind.Notepad;
+                    WindowKind = titleText.EndsWith(" - Notepad++") ? WindowKind.NotepadPlusPlus : WindowKind.Notepad;
                 }
             }
-            else
+            else if (titleText.Equals("Untitled - Notepad", StringComparison.Ordinal))
             {
-                switch (titleText)
-                {
-                    case "Untitled - Notepad":
-                        WindowKind = WindowKind.Notepad;
-                        break;
-                    default:
-                        if (notepadPlusPlusRegex.IsMatch(titleText))
-                        {
-                            WindowKind = WindowKind.NotepadPlusPlus;
-                        }
-                        break;
-
-                }
+                WindowKind = WindowKind.Notepad;
+            }
+            else if (notepadPlusPlusRegex.IsMatch(titleText))
+            {
+                WindowKind = WindowKind.NotepadPlusPlus;
             }
 
             Handle = FindInnerWindow(WindowKind);

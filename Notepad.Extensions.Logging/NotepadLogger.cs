@@ -11,16 +11,18 @@ namespace Notepad.Extensions.Logging
 {
     class NotepadLogger : ILogger
     {
-        public NotepadLogger(ObjectPool<StringBuilder> stringBuilderPool, IWindowFinder windowFinder, string categoryName)
+        public NotepadLogger(ObjectPool<StringBuilder> stringBuilderPool, IWindowFinder windowFinder, string categoryName, string windowName)
         {
             this.stringBuilderPool = stringBuilderPool ?? throw new ArgumentNullException(nameof(stringBuilderPool));
             this.windowFinder = windowFinder ?? throw new ArgumentNullException(nameof(windowFinder));
             this.categoryName = categoryName;
+            this.windowName = windowName;
         }
 
         readonly ObjectPool<StringBuilder> stringBuilderPool;
         readonly IWindowFinder windowFinder;
         readonly string categoryName;
+        readonly string windowName;
 
         public IDisposable BeginScope<TState>(TState state) => NullDisposable.Instance;
 
@@ -90,7 +92,7 @@ namespace Notepad.Extensions.Logging
 
         void WriteToNotepad(string message)
         {
-            var info = windowFinder.FindNotepadWindow();
+            var info = windowFinder.FindNotepadWindow(windowName);
             switch (info.Kind)
             {
                 case WindowKind.Notepad:

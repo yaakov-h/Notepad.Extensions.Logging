@@ -9,6 +9,6 @@ namespace Microsoft.Extensions.Logging
         /// <summary>
         /// Name of window to search.
         /// </summary>
-        public string WindowName { get; set; } = "Untitled - Notepad";
+        public string WindowName { get; set; }
     }
 }
