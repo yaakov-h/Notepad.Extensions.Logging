@@ -98,6 +98,7 @@ namespace Notepad.Extensions.Logging
                 case WindowKind.Notepad:
                     SendMessage(info.Handle, EM_REPLACESEL, (IntPtr)1, message);
                     break;
+                case WindowKind.Notepad2:
                 case WindowKind.NotepadPlusPlus:
                     WriteToNotepadPlusPlus(info.Handle, message);
                     break;

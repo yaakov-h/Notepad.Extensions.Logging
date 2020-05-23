@@ -44,6 +44,12 @@ namespace Notepad.Extensions.Logging
                 sb.Remove(0, 1);
             }
 
+            if (sb.Length > 0 && sb[0] == ' ')
+            {
+                // Notepad2 added space after asterisk
+                sb.Remove(0, 1);
+            }
+
             if (IsKnownNotepadWindow(sb.ToString()))
             {
                 return false;
@@ -60,12 +66,27 @@ namespace Notepad.Extensions.Logging
             {
                 if (WindowName.Equals(titleText, StringComparison.Ordinal))
                 {
-                    WindowKind = titleText.EndsWith(" - Notepad++", StringComparison.Ordinal) ? WindowKind.NotepadPlusPlus : WindowKind.Notepad;
+                    if (titleText.EndsWith(" - Notepad++", StringComparison.Ordinal))
+                    {
+                        WindowKind = WindowKind.NotepadPlusPlus;
+                    }
+                    else if (titleText.EndsWith(" - Notepad2", StringComparison.Ordinal))
+                    {
+                        WindowKind = WindowKind.Notepad2;
+                    }
+                    else
+                    {
+                        WindowKind = WindowKind.Notepad;
+                    }
                 }
             }
             else if (titleText.Equals("Untitled - Notepad", StringComparison.Ordinal))
             {
                 WindowKind = WindowKind.Notepad;
+            }
+            else if (titleText.Equals("Untitled - Notepad2", StringComparison.Ordinal))
+            {
+                WindowKind = WindowKind.Notepad2;
             }
             else if (notepadPlusPlusRegex.IsMatch(titleText))
             {
@@ -83,6 +104,7 @@ namespace Notepad.Extensions.Logging
             {
                 case WindowKind.Notepad:
                     return NativeMethods.FindWindowEx(Handle, IntPtr.Zero, "EDIT", null);
+                case WindowKind.Notepad2:
                 case WindowKind.NotepadPlusPlus:
                     return NativeMethods.FindWindowEx(Handle, IntPtr.Zero, "Scintilla", null);
                 default:
