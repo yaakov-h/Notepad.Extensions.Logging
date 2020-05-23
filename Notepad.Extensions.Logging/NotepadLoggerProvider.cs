@@ -42,6 +42,10 @@ namespace Notepad.Extensions.Logging
         private void ReloadLoggerOptions(NotepadLoggerOptions options)
         {
             this.options = options;
+            if (windowFinder is WindowFinder finder)
+            {
+                finder.WindowName = this.options.WindowName;
+            }
         }
     }
 }

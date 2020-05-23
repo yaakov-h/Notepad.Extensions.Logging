@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging.Configuration;
 using Microsoft.Extensions.Options;
+using Notepad.Extensions.Logging;
 using System;
 
 namespace Microsoft.Extensions.Logging

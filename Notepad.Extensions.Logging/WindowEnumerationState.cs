@@ -16,11 +16,13 @@ namespace Notepad.Extensions.Logging
 
         public IntPtr Handle { get; private set; }
         public WindowKind WindowKind { get; private set; }
+        public string WindowName { get; internal set; }
 
         public void Reset()
         {
             Handle = default;
             WindowKind = default;
+            WindowName = default;
             sb.Clear();
         }
 
@@ -47,26 +49,50 @@ namespace Notepad.Extensions.Logging
             return true;
         }
 
-        static Regex notepadPlusPlusRegex = new Regex(@"^new \d+ - Notepad\+\+$", RegexOptions.Compiled);
+        static Regex notepadPlusPlusRegex = new Regex(@" - Notepad\+\+$", RegexOptions.Compiled);
 
         bool IsKnownNotepadWindow(string titleText)
         {
-            switch (titleText)
+            if (!string.IsNullOrWhiteSpace(WindowName))
             {
-                case "Untitled - Notepad":
-                    WindowKind = WindowKind.Notepad;
-                    Handle = NativeMethods.FindWindowEx(Handle, IntPtr.Zero, "EDIT", null);
-                    return true;
+                if (WindowName.Equals(titleText, StringComparison.Ordinal))
+                {
+                    WindowKind = notepadPlusPlusRegex.IsMatch(titleText) ? WindowKind.NotepadPlusPlus : WindowKind.Notepad;
+                }
+            }
+            else
+            {
+                switch (titleText)
+                {
+                    case "Untitled - Notepad":
+                        WindowKind = WindowKind.Notepad;
+                        break;
+                    default:
+                        if (notepadPlusPlusRegex.IsMatch(titleText))
+                        {
+                            WindowKind = WindowKind.NotepadPlusPlus;
+                        }
+                        break;
+
+                }
             }
 
-            if (notepadPlusPlusRegex.IsMatch(titleText))
-            {
-                WindowKind = WindowKind.NotepadPlusPlus;
-                Handle = NativeMethods.FindWindowEx(Handle, IntPtr.Zero, "Scintilla", null);
-                return true;
-            }
+            Handle = FindInnerWindow(WindowKind);
 
-            return false;
+            return WindowKind != default;
+        }
+
+        IntPtr FindInnerWindow(WindowKind windowKind)
+        {
+            switch (windowKind)
+            {
+                case WindowKind.Notepad:
+                    return NativeMethods.FindWindowEx(Handle, IntPtr.Zero, "EDIT", null);
+                case WindowKind.NotepadPlusPlus:
+                    return NativeMethods.FindWindowEx(Handle, IntPtr.Zero, "Scintilla", null);
+                default:
+                    return Handle;
+            }
         }
     }
 }

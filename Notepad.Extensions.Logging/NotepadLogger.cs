@@ -94,14 +94,11 @@ namespace Notepad.Extensions.Logging
             switch (info.Kind)
             {
                 case WindowKind.Notepad:
-                        SendMessage(info.Handle, EM_REPLACESEL, (IntPtr)1, message);
+                    SendMessage(info.Handle, EM_REPLACESEL, (IntPtr)1, message);
                     break;
-
                 case WindowKind.NotepadPlusPlus:
-                {
                     WriteToNotepadPlusPlus(info.Handle, message);
                     break;
-                }
             }
         }
 
