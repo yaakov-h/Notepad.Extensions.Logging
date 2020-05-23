@@ -9,14 +9,11 @@ namespace Notepad.Extensions.Logging
     [ProviderAlias("Notepad")]
     class NotepadLoggerProvider : ILoggerProvider
     {
-        readonly ObjectPool<StringBuilder> stringBuilderPool;
-        readonly IDisposable optionsReloadToken;
-        NotepadLoggerOptions options;
-
         NotepadLoggerProvider()
         {
             var poolProvider = new DefaultObjectPoolProvider();
             stringBuilderPool = poolProvider.CreateStringBuilderPool();
+            windowFinder = new WindowFinder();
         }
 
         public NotepadLoggerProvider(IOptionsMonitor<NotepadLoggerOptions> options) : this()
@@ -30,8 +27,12 @@ namespace Notepad.Extensions.Logging
         {
             this.options = options;
         }
-
-        public ILogger CreateLogger(string categoryName) => new NotepadLogger(stringBuilderPool, categoryName, options.WindowName);
+        readonly ObjectPool<StringBuilder> stringBuilderPool;
+        readonly IWindowFinder windowFinder;
+        readonly IDisposable optionsReloadToken;
+        NotepadLoggerOptions options;
+        
+        public ILogger CreateLogger(string categoryName) => new NotepadLogger(stringBuilderPool, windowFinder, categoryName);
 
         public void Dispose()
         {

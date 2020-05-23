@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Buffers;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -12,18 +11,16 @@ namespace Notepad.Extensions.Logging
 {
     class NotepadLogger : ILogger
     {
-        public NotepadLogger(ObjectPool<StringBuilder> stringBuilderPool, string categoryName, string windowName)
+        public NotepadLogger(ObjectPool<StringBuilder> stringBuilderPool, IWindowFinder windowFinder, string categoryName)
         {
-            this.stringBuilderPool = stringBuilderPool;
+            this.stringBuilderPool = stringBuilderPool ?? throw new ArgumentNullException(nameof(stringBuilderPool));
+            this.windowFinder = windowFinder ?? throw new ArgumentNullException(nameof(windowFinder));
             this.categoryName = categoryName;
-            this.windowName = windowName ?? throw new ArgumentNullException(nameof(windowName));
-            this.changedWindowName = $"*{windowName}";
         }
 
         readonly ObjectPool<StringBuilder> stringBuilderPool;
+        readonly IWindowFinder windowFinder;
         readonly string categoryName;
-        readonly string windowName;
-        readonly string changedWindowName;
 
         public IDisposable BeginScope<TState>(TState state) => NullDisposable.Instance;
 
@@ -93,16 +90,16 @@ namespace Notepad.Extensions.Logging
 
         void WriteToNotepad(string message)
         {
-            var (kind, hwnd) = WindowFinder.FindNotepadWindow();
-            switch (kind)
+            var info = windowFinder.FindNotepadWindow();
+            switch (info.Kind)
             {
                 case WindowKind.Notepad:
-                        SendMessage(hwnd, EM_REPLACESEL, (IntPtr)1, message);
+                        SendMessage(info.Handle, EM_REPLACESEL, (IntPtr)1, message);
                     break;
 
                 case WindowKind.NotepadPlusPlus:
                 {
-                    WriteToNotepadPlusPlus(hwnd, message);
+                    WriteToNotepadPlusPlus(info.Handle, message);
                     break;
                 }
             }

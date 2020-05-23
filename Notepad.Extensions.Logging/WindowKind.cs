@@ -1,6 +1,6 @@
 ﻿namespace Notepad.Extensions.Logging
 {
-    public enum WindowKind
+    enum WindowKind
     {
         Invalid,
         Notepad,
