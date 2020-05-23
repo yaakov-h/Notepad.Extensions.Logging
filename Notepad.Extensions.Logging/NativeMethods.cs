@@ -27,7 +27,7 @@ namespace Notepad.Extensions.Logging
         [DllImport("user32.dll")]
         public static extern bool EnumWindows(EnumWindowsDelegate lpEnumFunc, object lParam);
 
-        [DllImport("User32.dll")]
+        [DllImport("User32.dll", CharSet = CharSet.Unicode)]
         public static extern int GetWindowText(IntPtr hWndParent, StringBuilder sb, int maxCount);
 
         [DllImport("kernel32.dll", SetLastError = true)]

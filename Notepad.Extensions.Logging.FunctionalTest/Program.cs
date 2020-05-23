@@ -6,13 +6,13 @@ namespace Notepad.Extensions.Logging.FunctionalTest
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var sc = new ServiceCollection();
             sc.AddLogging(lb =>
             {
                 lb.AddConsole();
-                lb.AddNotepad();
+                lb.AddNotepad(o => o.WindowName = "mylog - Notepad++");
             });
 
             var sp = sc.BuildServiceProvider();
@@ -29,7 +29,7 @@ namespace Notepad.Extensions.Logging.FunctionalTest
             {
                 throw new InvalidOperationException("Wheeeeeeee");
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 return ex;
             }

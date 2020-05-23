@@ -1,0 +1,139 @@
+﻿[*.cs]
+
+# SA1200: Using directives should be placed correctly
+dotnet_diagnostic.SA1200.severity = none
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+
+# SA1400: Access modifier should be declared
+dotnet_diagnostic.SA1400.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none
+
+# SA1101: Prefix local calls with this
+dotnet_diagnostic.SA1101.severity = none
+
+# SA1201: Elements should appear in the correct order
+dotnet_diagnostic.SA1201.severity = none
+
+# SA1204: Static elements should appear before instance elements
+dotnet_diagnostic.SA1204.severity = none
+
+# SA1602: Enumeration items should be documented
+dotnet_diagnostic.SA1602.severity = none
+
+# CA1303: Do not pass literals as localized parameters
+dotnet_diagnostic.CA1303.severity = none
+
+# SA0001: XML comment analysis is disabled due to project configuration
+dotnet_diagnostic.SA0001.severity = none
+
+# WTG1001: Do not use the 'private' keyword.
+dotnet_diagnostic.WTG1001.severity = warning
+
+# WTG1002: Use the 'var' keyword instead of an explicit type where possible.
+dotnet_diagnostic.WTG1002.severity = warning
+
+# WTG1003: Do not leave whitespace on the end of the line.
+dotnet_diagnostic.WTG1003.severity = warning
+
+# WTG1004: Indent with tabs rather than spaces.
+dotnet_diagnostic.WTG1004.severity = none
+
+# WTG1005: Use consistent line endings.
+dotnet_diagnostic.WTG1005.severity = warning
+
+# WTG1006: Do not use the 'internal' keyword for non-nested type definitions.
+dotnet_diagnostic.WTG1006.severity = warning
+
+# WTG1007: Do not compare bool to a constant value.
+dotnet_diagnostic.WTG1007.severity = warning
+
+# WTG1008: Do not compare bool to a constant value in an expression.
+dotnet_diagnostic.WTG1008.severity = warning
+
+# WTG1009: Using directives must be ordered by kind.
+dotnet_diagnostic.WTG1009.severity = warning
+
+# WTG1010: Use the 'var' keyword instead of an explicit type where possible.
+dotnet_diagnostic.WTG1010.severity = warning
+
+# WTG1011: Use the 'var' keyword once when deconstructing an object.
+dotnet_diagnostic.WTG1011.severity = warning
+
+# WTG1012: Use the 'var' keyword instead of an explicit type where possible.
+dotnet_diagnostic.WTG1012.severity = warning
+
+# WTG1013: Don't use tuple types in public interfaces.
+dotnet_diagnostic.WTG1013.severity = warning
+
+# WTG1014: Don't nest conditional operators.
+dotnet_diagnostic.WTG1014.severity = warning
+
+# WTG1015: Conditional operators should not have multiline values.
+dotnet_diagnostic.WTG1015.severity = warning
+
+# WTG1016: Avoid the discard-coalesce-throw pattern.
+dotnet_diagnostic.WTG1016.severity = warning
+
+# WTG1017: Don't define variables that could be confused with discards.
+dotnet_diagnostic.WTG1017.severity = warning
+
+# WTG2001: Do not use ConfigureAwait from an async void method.
+dotnet_diagnostic.WTG2001.severity = warning
+
+# WTG2002: Avoid conditional compilation based on DEBUG.
+dotnet_diagnostic.WTG2002.severity = warning
+
+# WTG2003: Flags enums should specify explicit values.
+dotnet_diagnostic.WTG2003.severity = warning
+
+# WTG2004: This project does not use Code Contracts.
+dotnet_diagnostic.WTG2004.severity = warning
+
+# WTG2005: Use Correct Emit Overload
+dotnet_diagnostic.WTG2005.severity = warning
+
+# WTG2006: Do not pass the Compiled option into static methods on Regex.
+dotnet_diagnostic.WTG2006.severity = warning
+
+# WTG3001: Remove orphaned suppressions.
+dotnet_diagnostic.WTG3001.severity = warning
+
+# WTG3002: Prefer direct member access over linq.
+dotnet_diagnostic.WTG3002.severity = warning
+
+# WTG3003: Prefer direct member access over linq in an expression.
+dotnet_diagnostic.WTG3003.severity = warning
+
+# WTG3004: Prefer Array.Empty<T>() over creating a new empty array.
+dotnet_diagnostic.WTG3004.severity = warning
+
+# WTG3005: Don't call ToString() on a string.
+dotnet_diagnostic.WTG3005.severity = warning
+
+# WTG3006: Prefer nameof over calling ToString on an enum literal.
+dotnet_diagnostic.WTG3006.severity = warning
+
+# WTG3007: Overrides should not simply call base.
+dotnet_diagnostic.WTG3007.severity = warning
+
+# WTG3008: Do not compare value types with null.
+dotnet_diagnostic.WTG3008.severity = warning
+
+# WTG3009: Prefer Task.CompletedTask when applicable.
+dotnet_diagnostic.WTG3009.severity = warning
+
+# WTG3010: Don't await a trivially completed task.
+dotnet_diagnostic.WTG3010.severity = warning
+
+# WTG3101: Do not nest regions.
+dotnet_diagnostic.WTG3101.severity = warning
+
+# WTG3102: Regions should not split structures.
+dotnet_diagnostic.WTG3102.severity = warning
+
+# WTG3103: Conditional compilation directives should not split structures.
+dotnet_diagnostic.WTG3103.severity = warning

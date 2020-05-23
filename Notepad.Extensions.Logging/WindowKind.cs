@@ -4,6 +4,6 @@
     {
         Invalid,
         Notepad,
-        NotepadPlusPlus
+        NotepadPlusPlus,
     }
 }

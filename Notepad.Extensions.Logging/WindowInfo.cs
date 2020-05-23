@@ -11,6 +11,7 @@ namespace Notepad.Extensions.Logging
         }
 
         public WindowKind Kind { get; }
+
         public IntPtr Handle { get; }
     }
 }

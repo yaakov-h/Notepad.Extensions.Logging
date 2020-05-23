@@ -15,8 +15,10 @@ namespace Notepad.Extensions.Logging
         readonly StringBuilder sb;
 
         public IntPtr Handle { get; private set; }
+
         public WindowKind WindowKind { get; private set; }
-        public string WindowName { get; internal set; }
+
+        public string WindowName { get; set; }
 
         public void Reset()
         {
@@ -46,6 +48,7 @@ namespace Notepad.Extensions.Logging
             {
                 return false;
             }
+
             return true;
         }
 
@@ -57,7 +60,7 @@ namespace Notepad.Extensions.Logging
             {
                 if (WindowName.Equals(titleText, StringComparison.Ordinal))
                 {
-                    WindowKind = titleText.EndsWith(" - Notepad++") ? WindowKind.NotepadPlusPlus : WindowKind.Notepad;
+                    WindowKind = titleText.EndsWith(" - Notepad++", StringComparison.Ordinal) ? WindowKind.NotepadPlusPlus : WindowKind.Notepad;
                 }
             }
             else if (titleText.Equals("Untitled - Notepad", StringComparison.Ordinal))
