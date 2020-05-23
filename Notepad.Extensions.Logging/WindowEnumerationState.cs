@@ -16,11 +16,13 @@ namespace Notepad.Extensions.Logging
 
         public IntPtr Handle { get; private set; }
         public WindowKind WindowKind { get; private set; }
+        public string WindowName { get; internal set; }
 
         public void Reset()
         {
             Handle = default;
             WindowKind = default;
+            WindowName = default;
             sb.Clear();
         }
 
@@ -51,22 +53,38 @@ namespace Notepad.Extensions.Logging
 
         bool IsKnownNotepadWindow(string titleText)
         {
-            switch (titleText)
+            if (!string.IsNullOrWhiteSpace(WindowName))
             {
-                case "Untitled - Notepad":
-                    WindowKind = WindowKind.Notepad;
-                    Handle = NativeMethods.FindWindowEx(Handle, IntPtr.Zero, "EDIT", null);
-                    return true;
+                if (WindowName.Equals(titleText, StringComparison.Ordinal))
+                {
+                    WindowKind = titleText.EndsWith(" - Notepad++") ? WindowKind.NotepadPlusPlus : WindowKind.Notepad;
+                }
             }
-
-            if (notepadPlusPlusRegex.IsMatch(titleText))
+            else if (titleText.Equals("Untitled - Notepad", StringComparison.Ordinal))
+            {
+                WindowKind = WindowKind.Notepad;
+            }
+            else if (notepadPlusPlusRegex.IsMatch(titleText))
             {
                 WindowKind = WindowKind.NotepadPlusPlus;
-                Handle = NativeMethods.FindWindowEx(Handle, IntPtr.Zero, "Scintilla", null);
-                return true;
             }
 
-            return false;
+            Handle = FindInnerWindow(WindowKind);
+
+            return WindowKind != default;
+        }
+
+        IntPtr FindInnerWindow(WindowKind windowKind)
+        {
+            switch (windowKind)
+            {
+                case WindowKind.Notepad:
+                    return NativeMethods.FindWindowEx(Handle, IntPtr.Zero, "EDIT", null);
+                case WindowKind.NotepadPlusPlus:
+                    return NativeMethods.FindWindowEx(Handle, IntPtr.Zero, "Scintilla", null);
+                default:
+                    return Handle;
+            }
         }
     }
 }

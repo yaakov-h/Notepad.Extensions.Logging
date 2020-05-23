@@ -2,6 +2,6 @@
 {
     interface IWindowFinder
     {
-        WindowInfo FindNotepadWindow();
+        WindowInfo FindNotepadWindow(string windowName);
     }
 }
