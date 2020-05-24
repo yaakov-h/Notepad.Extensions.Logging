@@ -23,7 +23,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-3. Open a new Notepad window.
+3. Open a new Notepad, Notepad++, or Notepad2 window.
 4. Run your application.
 
 ## Source Material
