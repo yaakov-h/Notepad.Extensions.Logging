@@ -5,5 +5,6 @@
         Invalid,
         Notepad,
         NotepadPlusPlus,
+        Notepad2,
     }
 }
