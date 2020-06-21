@@ -138,7 +138,7 @@ namespace Notepad.Extensions.Logging
             }
             finally
             {
-                VirtualFreeEx(remoteProcess.Handle, IntPtr.Zero, IntPtr.Zero, MEM_RELEASE);
+                VirtualFreeEx(remoteProcess.Handle, mem, IntPtr.Zero, MEM_RELEASE);
             }
         }
     }
